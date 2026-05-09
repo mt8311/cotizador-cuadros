@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador Cuadros</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1a0d12;--surface:#251018;--surface2:#301420;--border:rgba(255,180,200,0.1);--border2:rgba(255,180,200,0.22);--text:#fdf0f4;--muted:#a07080;--accent:#f472a8;--danger:#e05c5c;--success:#6dbe8a;--warning:#e8a84a;--radius:12px;--rsm:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100;}
+.nav-brand{font-family:'DM Serif Display',serif;font-size:16px;color:var(--accent);}
+.nav-tabs{display:flex;gap:4px;}
+.ntab{padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;background:none;border:none;color:var(--muted);transition:all .15s;font-family:'DM Sans',sans-serif;}
+.ntab.active{background:var(--accent);color:#1a0d12;font-weight:500;}
+.ntab:hover:not(.active){color:var(--text);}
+.page{display:none;padding:20px;max-width:580px;margin:0 auto;}
+.page.active{display:block;}
+.sl{font-size:18px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:24px;}
+.sl:first-child{margin-top:0;}
+.og{display:flex;flex-wrap:wrap;gap:8px;}
+.o{border:1px solid var(--border2);border-radius:var(--rsm);padding:14px 20px;font-size:18px;cursor:pointer;background:var(--surface);color:var(--text);transition:all .12s;font-family:'DM Sans',sans-serif;}
+.o:hover{border-color:var(--accent);}
+.o.sel{background:var(--accent);border-color:var(--accent);color:#1a0d12;font-weight:500;}
+.o.full{width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;}
+.op{font-size:13px;opacity:.7;}
+.o.sel .op{opacity:.8;}
+.vchip{display:inline-flex;align-items:center;gap:8px;background:rgba(244,114,168,.12);border:1px solid rgba(244,114,168,.3);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--accent);margin-bottom:16px;cursor:pointer;}
+.vc-1{border-color:#f472a8;color:#f472a8;}.vc-1.sel{background:#f472a8;color:#1a0d12;}
+.vc-2{border-color:#a78bfa;color:#a78bfa;}.vc-2.sel{background:#a78bfa;color:#1a0d12;}
+.vc-3{border-color:#34d399;color:#34d399;}.vc-3.sel{background:#34d399;color:#1a0d12;}
+.vc-4{border-color:#60a5fa;color:#60a5fa;}.vc-4.sel{background:#60a5fa;color:#1a0d12;}
+.vc-5{border-color:#fbbf24;color:#fbbf24;}.vc-5.sel{background:#fbbf24;color:#1a0d12;}
+.vc-6{border-color:#f87171;color:#f87171;}.vc-6.sel{background:#f87171;color:#1a0d12;}
+.vc-7{border-color:#38bdf8;color:#38bdf8;}.vc-7.sel{background:#38bdf8;color:#1a0d12;}
+.vc-8{border-color:#fb923c;color:#fb923c;}.vc-8.sel{background:#fb923c;color:#1a0d12;}
+.rbox{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:22px;text-align:center;margin-top:20px;}
+.rl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.rp{font-family:'DM Serif Display',serif;font-size:54px;color:var(--accent);line-height:1;}
+.rprod{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.4;}
+.rtag{display:inline-block;margin-top:10px;font-size:11px;padding:3px 12px;border-radius:20px;background:rgba(244,114,168,.12);color:var(--accent);border:1px solid rgba(244,114,168,.25);}
+.rdes{margin-top:14px;border-top:1px solid var(--border);padding-top:14px;}
+.dr{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--muted);}
+.dr span:last-child{color:var(--text);font-weight:500;}
+.btn{width:100%;padding:13px;border-radius:var(--rsm);border:none;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .15s;margin-top:10px;font-weight:500;}
+.bwa{background:#25d366;color:#fff;}
+.bwa:hover{background:#1fb855;}
+.breset{background:var(--surface2);color:var(--muted);border:1px solid var(--border);margin-top:6px;}
+.breset:hover{color:var(--text);}
+.inp{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rsm);padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;}
+.inp:focus{outline:none;border-color:var(--accent);}
+.ir{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.ir label,.campo label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.sc{border:1px solid var(--border2);border-radius:var(--rsm);padding:10px 8px;text-align:center;cursor:pointer;background:var(--surface);transition:all .12s;}
+.sc:hover{border-color:var(--accent);}
+.sc.sel{background:var(--accent);border-color:var(--accent);}
+.sct{font-size:13px;font-weight:500;color:var(--text);}
+.sc.sel .sct{color:#1a0d12;}
+.scp{font-size:12px;color:var(--muted);margin-top:3px;}
+.sc.sel .scp{color:rgba(26,13,18,.7);}
+.cc{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:14px;}
+.ccl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px;}
+.ccp{font-family:'DM Serif Display',serif;font-size:36px;color:var(--accent);}
+.ccd{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+.campo{margin-bottom:10px;}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+.note{font-size:12px;color:var(--muted);margin-top:6px;padding:8px 12px;background:rgba(244,114,168,.06);border-radius:var(--rsm);border-left:3px solid rgba(244,114,168,.3);}
+/* ADMIN */
+.stg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.st{background:var(--surface2);border-radius:var(--rsm);padding:14px;text-align:center;}
+.st .sv{font-family:'DM Serif Display',serif;font-size:28px;color:var(--accent);}
+.st .sk{font-size:11px;color:var(--muted);margin-top:2px;}
+.le{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.lei{font-size:13px;color:var(--text);flex:1;min-width:0;}
+.lem{font-size:11px;color:var(--muted);margin-top:2px;}
+.lep{font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent);white-space:nowrap;}
+.lev{font-size:11px;font-weight:500;color:var(--accent);background:rgba(244,114,168,.1);padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle;}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+.bp{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;margin-left:6px;vertical-align:middle;}
+.bp-neon{background:rgba(109,190,138,.15);color:#6dbe8a;}
+.bp-acrilico{background:rgba(232,168,74,.15);color:#e8a84a;}
+.bp-resina{background:rgba(220,130,100,.15);color:#e8906a;}
+.bp-polioleo{background:rgba(200,120,200,.15);color:#d4a0d4;}
+.bp-vinil{background:rgba(100,160,220,.15);color:#6db4e8;}
+.fecha-row{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:end;}
+.fecha-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.btn-fecha{padding:10px 14px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--surface2);color:var(--accent);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-fecha:hover{background:var(--accent);color:#1a0d12;}
+.chart-wrap{background:var(--surface2);border-radius:var(--radius);padding:16px;min-height:120px;}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.chart-name{font-size:12px;color:var(--text);width:70px;flex-shrink:0;text-align:right;}
+.chart-bar-track{flex:1;height:28px;background:var(--surface);border-radius:6px;overflow:hidden;position:relative;}
+.chart-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--vc,#f472a8),var(--vc2,#e0407e));transition:width .4s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;}
+.chart-bar-val{font-size:11px;font-weight:500;color:#fff;white-space:nowrap;}
+.chart-bar-zero{font-size:11px;color:var(--muted);padding-left:8px;position:absolute;top:50%;transform:translateY(-50%);}
+.chart-empty{text-align:center;color:var(--muted);font-size:13px;padding:20px;}
+.adh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.clrbtn{font-size:12px;color:var(--danger);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.ftabs,.vftabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.ft,.vft{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.ft.active{background:var(--surface2);color:var(--text);}
+.vft.active{background:rgba(244,114,168,.15);color:var(--accent);border-color:rgba(244,114,168,.3);}
+
+/* CARRITO MULTI-PRODUCTO */
+.carrito-wrap{background:var(--surface2);border:1px solid rgba(244,114,168,.25);border-radius:var(--radius);padding:14px;margin-top:16px;margin-bottom:8px;}
+.carrito-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.carrito-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.carrito-item:last-child{border-bottom:none;}
+.ci-label{flex:1;color:var(--text);font-size:12px;}
+.ci-qty{color:var(--muted);font-size:11px;margin-top:2px;}
+.ci-precio{font-family:'DM Serif Display',serif;font-size:16px;color:var(--accent);margin:0 10px;}
+.ci-del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px;padding:2px 6px;}
+.carrito-total{display:flex;justify-content:space-between;align-items:center;padding-top:10px;margin-top:6px;border-top:1px solid var(--border2);}
+.carrito-total-label{font-size:12px;color:var(--muted);}
+.carrito-total-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);}
+.btn-add-prod{width:100%;padding:10px;border-radius:var(--rsm);border:1px dashed rgba(244,114,168,.4);background:rgba(244,114,168,.05);color:var(--accent);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;margin-top:8px;transition:all .15s;}
+.btn-add-prod:hover{background:rgba(244,114,168,.12);}
+
+/* CONFIG PANEL */
+.cfg-section{background:var(--surface2);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.cfg-title{font-size:12px;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.cfg-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.cfg-item:last-child{border-bottom:none;}
+.cfg-item-name{color:var(--text);}
+.cfg-item-price{color:var(--muted);font-size:12px;}
+.cfg-del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;padding:2px 8px;}
+.cfg-add-row{display:flex;gap:8px;margin-top:10px;}
+.cfg-add-row .inp{font-size:13px;padding:8px 12px;}
+.cfg-save{padding:8px 16px;border-radius:var(--rsm);border:none;background:var(--accent);color:#1a0d12;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;}
+.price-inp{width:90px;text-align:right;}
+
+/* WA STATUS */
+.wa-ok{color:var(--success);}
+.wa-err{color:var(--danger);}
+/* HISTORIAL VENDEDOR */
+.mc-item{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--rsm);padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.mc-info{flex:1;min-width:0;}
+.mc-label{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mc-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.mc-price{font-family:'DM Serif Display',serif;font-size:16px;color:var(--accent);white-space:nowrap;}
+.mc-btns{display:flex;gap:6px;flex-shrink:0;}
+.mc-btn{font-size:11px;padding:5px 10px;border-radius:var(--rsm);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;}
+.mc-btn-wa{background:#25d366;color:#fff;}
+.mc-btn-edit{background:var(--surface);color:var(--accent);border:1px solid rgba(244,114,168,.3);}
+/* DESCUENTO GERENTE */
+.desc-gerente{background:var(--surface2);border:1px solid rgba(244,114,168,.3);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
+.desc-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.desc-icon{font-size:18px;}
+.desc-title{font-size:13px;font-weight:500;color:var(--accent);}
+.desc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.desc-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.desc-resultado{margin-top:10px;padding:8px 12px;background:rgba(109,190,138,.1);border-radius:var(--rsm);border:1px solid rgba(109,190,138,.25);font-size:13px;color:#3B6D11;text-align:center;}
+/* FACTURA */
+.factura{background:#fff;border-radius:var(--radius);padding:20px;margin-top:16px;color:#1a1a1a;}
+.fac-header{border-bottom:2px solid #f472a8;padding-bottom:12px;margin-bottom:12px;}
+.fac-brand{font-family:'DM Serif Display',serif;font-size:18px;color:#c0306e;}
+.fac-sub{font-size:12px;color:#888;margin-top:2px;}
+.fac-date{font-size:11px;color:#aaa;margin-top:4px;}
+.fac-vend{font-size:12px;color:#666;margin-top:2px;}
+.fac-cliente{background:#fdf0f4;border-radius:var(--rsm);padding:10px 12px;margin-bottom:12px;}
+.fac-cl-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#c0306e;margin-bottom:3px;}
+.fac-cl-nom{font-size:15px;font-weight:500;color:#1a1a1a;}
+.fac-table{width:100%;border-collapse:collapse;font-size:13px;}
+.fac-table th{background:#fdf0f4;color:#c0306e;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 8px;text-align:left;}
+.fac-table th:last-child,.fac-table td:last-child{text-align:right;}
+.fac-table td{padding:8px;border-bottom:1px solid #f5e0ea;color:#333;vertical-align:top;}
+.fac-table tbody tr:last-child td{border-bottom:none;}
+.fac-desc-label{font-size:12px;color:#3B6D11;padding:8px;}
+.fac-total-row{border-top:2px solid #f472a8;}
+.fac-total-label{font-size:13px;font-weight:700;color:#1a1a1a;padding:10px 8px;}
+.fac-total-val{font-family:'DM Serif Display',serif;font-size:20px;color:#c0306e;padding:10px 8px;text-align:right;}
+.may-badge{background:rgba(109,190,138,.15);color:#3B6D11;border:1px solid rgba(109,190,138,.3);border-radius:20px;padding:5px 14px;font-size:12px;text-align:center;margin-bottom:8px;}
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-brand">Cotizador Cuadros</span>
+  <div class="nav-tabs">
+    <button class="ntab active" onclick="showPage('cotizador',this)">Cotizar</button>
+    <button class="ntab" onclick="showPage('admin',this)">Panel</button>
+    <button class="ntab" onclick="showPage('config',this)">Config</button>
+  </div>
+</nav>
+
+<div class="page active" id="page-cotizador">
+
+  <!-- VENDEDOR -->
+  <div id="bv">
+    <p class="sl">Hola, quien atiende?</p>
+    <div class="og" id="vg">
+      <div class="o vc-1" onclick="selV('Maria',this)">Maria</div>
+      <div class="o vc-2" onclick="selV('Minerva',this)">Minerva</div>
+      <div class="o vc-3" onclick="selV('Myrna',this)">Myrna</div>
+      <div class="o vc-4" onclick="selV('Emiliano',this)">Emiliano</div>
+      <div class="o vc-5" onclick="selV('Nubia',this)">Nubia</div>
+      <div class="o vc-6" onclick="selV('Cesar',this)">Cesar</div>
+      <div class="o vc-7" onclick="selV('Diana',this)">Diana</div>
+      <div class="o vc-8" onclick="selV('Ivan',this)">Ivan</div>
+    </div>
+  </div>
+
+  <div id="bp" style="display:none">
+    <div class="vchip" id="vchip-el" onclick="cambiarV()"><span id="vlabel">-</span><span style="font-size:11px;opacity:.6">cambiar</span></div>
+    <!-- BANNER EDICION ACTIVA -->
+    <div id="edit-banner" style="display:none;background:rgba(232,168,74,.12);border:1px solid rgba(232,168,74,.4);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span style="font-size:11px;color:var(--warning);font-weight:500;text-transform:uppercase;letter-spacing:.06em">Editando cotizacion </span><span id="edit-banner-ctrl" style="font-size:11px;color:var(--warning);font-weight:700"></span>
+          <div id="edit-banner-label" style="font-size:12px;color:var(--text);margin-top:2px"></div>
+        </div>
+        <button onclick="cancelarEdicion()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">Cancelar</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Selecciona el nuevo producto y envia el presupuesto para guardar los cambios</div>
+    </div>
+
+    <div id="mis-cots-wrap" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">Mis cotizaciones</span>
+        <button onclick="toggleMisCots()" id="btn-mis-cots" style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">Ver</button>
+      </div>
+      <div id="mis-cots-list" style="display:none">
+        <input class="inp" id="mc-search" type="text" placeholder="Buscar por nombre, telefono, fecha o #control..." style="margin-bottom:8px;font-size:13px" oninput="renderMisCots()">
+        <div id="mis-cots-inner"></div>
+      </div>
+    </div>
+
+    <!-- PRODUCTOS -->
+    <p class="sl" style="margin-top:0">Que producto?</p>
+    <div class="og" id="pg">
+      <div class="o" onclick="selProd('neon',this)">Cuadro Neon</div>
+      <div class="o" onclick="selProd('acrilico',this)">Letrero Acrilico</div>
+      <div class="o" onclick="selProd('resina',this)">Cuadro en Resina</div>
+      <div class="o" onclick="selProd('polioleo',this)">Cuadro en Polioleo</div>
+      <div class="o" onclick="selProd('vinil',this)">Impresiones en Vinil</div>
+    </div>
+
+    <!-- ===== NEON ===== -->
+    <div id="b-neon" style="display:none">
+      <p class="sl">Tipo de cuadro?</p>
+      <div class="og" id="neon-tipo">
+        <div class="o" onclick="sO('neon-tipo',this,'linea')">Tamano de linea</div>
+        <div class="o" onclick="sO('neon-tipo',this,'custom')">Medida personalizada</div>
+      </div>
+      <div id="neon-linea" style="display:none">
+        <p class="sl">Selecciona tamano y complejidad</p>
+        <div class="og" id="neon-linea-opts">
+          <div class="o full" onclick="sO('neon-linea-opts',this,'4050-exh')">40x50 Exhibicion<span class="op">$1,000</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'4050-nom')">40x50 Nombre/texto<span class="op">$1,200</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'4050-fra')">40x50 Frase/2 colores<span class="op">$1,600</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'5686-exh')">56x86 Exhibicion<span class="op">$1,500</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'5686-nom')">56x86 Nombre/texto<span class="op">$2,200</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'5686-fra')">56x86 Frase/2 colores<span class="op">$2,800</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'5686-log')">56x86 Logo/arte<span class="op">$3,500</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'6080-exh')">60x80 Exhibicion<span class="op">$1,500</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'6080-nom')">60x80 Nombre/texto<span class="op">$2,200</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'6080-fra')">60x80 Frase/2 colores<span class="op">$2,800</span></div>
+          <div class="o full" onclick="sO('neon-linea-opts',this,'6080-log')">60x80 Logo/arte<span class="op">$3,500</span></div>
+        </div>
+      </div>
+      <div id="neon-custom" style="display:none">
+        <p class="sl">Medidas del cuadro (cm)</p>
+        <div class="ir">
+          <div><label>Ancho (cm)</label><input class="inp" id="nc-w" type="number" min="1" placeholder="Ej. 70" oninput="calcNeon()"></div>
+          <div><label>Alto (cm)</label><input class="inp" id="nc-h" type="number" min="1" placeholder="Ej. 100" oninput="calcNeon()"></div>
+        </div>
+        <p class="sl">Complejidad del diseno</p>
+        <div class="og" id="neon-comp">
+          <div class="o" onclick="sO('neon-comp',this,'nom');calcNeon()">Nombre/texto</div>
+          <div class="o" onclick="sO('neon-comp',this,'fra');calcNeon()">Frase/2 colores</div>
+          <div class="o" onclick="sO('neon-comp',this,'log');calcNeon()">Logo/arte</div>
+        </div>
+        <div class="cc" id="neon-custom-res" style="display:none">
+          <div class="ccl">Precio calculado</div>
+          <div class="ccp" id="nc-precio">-</div>
+          <div class="ccd">
+            <div class="dr"><span>Area</span><span id="nc-area">-</span></div>
+            <div class="dr"><span>Materiales</span><span id="nc-mat">-</span></div>
+            <div class="dr"><span>Cargo complejidad</span><span id="nc-comp">-</span></div>
+            <div class="dr"><span>Nota</span><span id="nc-nota">-</span></div>
+          </div>
+          <button class="btn bwa" style="margin-top:12px" onclick="confirmarNeonCustom()">Usar este precio</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ACRILICO ===== -->
+    <div id="b-acrilico" style="display:none">
+      <p class="sl">Tipo de letrero?</p>
+      <div class="og" id="acr-tipo">
+        <div class="o" onclick="sO('acr-tipo',this,'linea')">Tamano de linea</div>
+        <div class="o" onclick="sO('acr-tipo',this,'custom')">Medida personalizada</div>
+      </div>
+      <div id="acr-linea" style="display:none">
+        <p class="sl">Selecciona tamano</p>
+        <div class="og" id="acr-linea-opts">
+          <div class="o full" onclick="sO('acr-linea-opts',this,'50x20')">50x20 cm - 1 palabra<span class="op">$950</span></div>
+          <div class="o full" onclick="sO('acr-linea-opts',this,'70x35')">70x35 cm - Frase 2-3 colores<span class="op">$1,500</span></div>
+          <div class="o full" onclick="sO('acr-linea-opts',this,'70x50')">70x50 cm - Palabra + icono<span class="op">$2,200</span></div>
+          <div class="o full" onclick="sO('acr-linea-opts',this,'85x80')">85x80 cm - Logo personalizado<span class="op">$3,200</span></div>
+        </div>
+      </div>
+      <div id="acr-custom" style="display:none">
+        <p class="sl">Medidas del letrero (cm)</p>
+        <div class="ir">
+          <div><label>Ancho (cm)</label><input class="inp" id="ac-w" type="number" min="1" placeholder="Ej. 120" oninput="calcAcr()"></div>
+          <div><label>Alto (cm)</label><input class="inp" id="ac-h" type="number" min="1" placeholder="Ej. 80" oninput="calcAcr()"></div>
+        </div>
+        <div class="cc" id="acr-custom-res" style="display:none">
+          <div class="ccl">Precio calculado</div>
+          <div class="ccp" id="ac-precio">-</div>
+          <div class="ccd">
+            <div class="dr"><span>Area</span><span id="ac-area">-</span></div>
+            <div class="dr"><span>Acrilico</span><span id="ac-acr">-</span></div>
+            <div class="dr"><span>LED</span><span id="ac-led">-</span></div>
+            <div class="dr"><span>Mano de obra</span><span id="ac-mo">-</span></div>
+            <div class="dr"><span>Nota</span><span id="ac-nota">-</span></div>
+          </div>
+          <button class="btn bwa" style="margin-top:12px" onclick="confirmarAcrCustom()">Usar este precio</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RESINA ===== -->
+    <div id="b-resina" style="display:none">
+      <p class="sl">Que tipo de cuadro en resina?</p>
+      <div class="og" id="res-tipo">
+        <div class="o" onclick="sO('res-tipo',this,'img-linea')">Con imagen de linea</div>
+        <div class="o" onclick="sO('res-tipo',this,'img-custom')">Con imagen personalizada</div>
+      </div>
+
+      <!-- imagen de linea (gancho) -->
+      <div id="res-img-linea" style="display:none">
+        <p class="sl">Selecciona tamano</p>
+        <div class="sg" id="res-il-grid"></div>
+        <p class="note">Precio especial de exhibicion. Imagen del cliente incluida.</p>
+      </div>
+
+      <!-- imagen personalizada -->
+      <div id="res-img-custom" style="display:none">
+        <p class="sl">Bastidor de linea o medida especial?</p>
+        <div class="og" id="res-ic-tipo">
+          <div class="o" onclick="sO('res-ic-tipo',this,'linea')">Bastidor de linea</div>
+          <div class="o" onclick="sO('res-ic-tipo',this,'custom')">Medida especial</div>
+        </div>
+        <div id="res-ic-linea" style="display:none">
+          <p class="sl">Tamano</p>
+          <div class="sg" id="res-ic-grid"></div>
+        </div>
+        <div id="res-ic-medida" style="display:none">
+          <p class="sl">Medidas en cm</p>
+          <div class="ir">
+            <div><label>Ancho (cm)</label><input class="inp" id="ric-w" type="number" min="1" placeholder="Ej. 40" oninput="calcResImg()"></div>
+            <div><label>Alto (cm)</label><input class="inp" id="ric-h" type="number" min="1" placeholder="Ej. 60" oninput="calcResImg()"></div>
+          </div>
+          <div class="cc" id="ric-res" style="display:none">
+            <div class="ccl">Precio calculado</div>
+            <div class="ccp" id="ric-precio">-</div>
+            <div class="ccd">
+              <div class="dr"><span>Servicio</span><span id="ric-serv">-</span></div>
+              <div class="dr"><span>Bastidor personalizado</span><span id="ric-bast">-</span></div>
+              <div class="dr"><span>Material</span><span id="ric-mat">-</span></div>
+            </div>
+            <button class="btn bwa" style="margin-top:12px" onclick="confirmarResImgCustom()">Usar este precio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== POLIOLEO ===== -->
+    <div id="b-polioleo" style="display:none">
+      <p class="sl">Tipo?</p>
+      <div class="og" id="pol-tipo">
+        <div class="o" onclick="sO('pol-tipo',this,'linea')">De linea (gancho)</div>
+        <div class="o" onclick="sO('pol-tipo',this,'custom')">Personalizado</div>
+      </div>
+      <div id="pol-linea" style="display:none">
+        <p class="sl">Tamano</p>
+        <div class="og" id="pol-l-opts">
+          <div class="o" onclick="sO('pol-l-opts',this,'pl-20x25')">20x25 - $60</div>
+          <div class="o" onclick="sO('pol-l-opts',this,'pl-28x40')">28x40 - $90</div>
+          <div class="o" onclick="sO('pol-l-opts',this,'pl-40x50')">40x50 - $150</div>
+          <div class="o" onclick="sO('pol-l-opts',this,'pl-56x86')">56x86 - $250</div>
+          <div class="o" onclick="sO('pol-l-opts',this,'pl-56x86-may')">56x86 Mayoreo 12+ pzas - $230</div>
+        </div>
+        <p class="note">Precio gancho de exhibicion.</p>
+      </div>
+      <div id="pol-custom" style="display:none">
+        <p class="sl">Bastidor de linea o personalizado?</p>
+        <div class="og" id="pol-c-tipo">
+          <div class="o" onclick="sO('pol-c-tipo',this,'linea')">Bastidor de linea</div>
+          <div class="o" onclick="sO('pol-c-tipo',this,'custom')">Bastidor personalizado</div>
+        </div>
+        <div id="pol-c-linea" style="display:none">
+          <p class="sl">Tamano</p>
+          <div class="og" id="pol-cl-opts">
+            <div class="o" onclick="sO('pol-cl-opts',this,'pc-28x40')">28x40 - $150</div>
+            <div class="o" onclick="sO('pol-cl-opts',this,'pc-40x50')">40x50 - $250</div>
+            <div class="o" onclick="sO('pol-cl-opts',this,'pc-56x86')">56x86 - $480</div>
+          </div>
+        </div>
+        <div id="pol-c-custom" style="display:none">
+          <p class="sl">Medidas en cm</p>
+          <div class="ir">
+            <div><label>Ancho (cm)</label><input class="inp" id="pc-w" type="number" min="1" placeholder="Ej. 60" oninput="calcPolCustom()"></div>
+            <div><label>Alto (cm)</label><input class="inp" id="pc-h" type="number" min="1" placeholder="Ej. 90" oninput="calcPolCustom()"></div>
+          </div>
+          <div class="cc" id="pc-res" style="display:none">
+            <div class="ccl">Precio calculado</div>
+            <div class="ccp" id="pc-precio">-</div>
+            <div class="ccd">
+              <div class="dr"><span>Bastidor (medida x medida x 0.06)</span><span id="pc-bast">-</span></div>
+              <div class="dr"><span>Pegamento rosa + pigmento</span><span id="pc-mat">-</span></div>
+              <div class="dr"><span>Mano de obra</span><span id="pc-mo">-</span></div>
+            </div>
+            <button class="btn bwa" style="margin-top:12px" onclick="confirmarPolCustom()">Usar este precio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VINIL ===== -->
+    <div id="b-vinil" style="display:none">
+      <p class="sl">Medidas de la impresion (cm)</p>
+      <div class="ir">
+        <div><label>Ancho (cm)</label><input class="inp" id="vn-w" type="number" min="1" placeholder="Ej. 90" oninput="calcVinil()"></div>
+        <div><label>Alto (cm)</label><input class="inp" id="vn-h" type="number" min="1" placeholder="Ej. 60" oninput="calcVinil()"></div>
+      </div>
+      <div class="cc" id="vn-res" style="display:none">
+        <div class="ccl">Precio calculado</div>
+        <div class="ccp" id="vn-precio">-</div>
+        <div class="ccd">
+          <div class="dr"><span>Area</span><span id="vn-area">-</span></div>
+        </div>
+        <button class="btn bwa" style="margin-top:12px" onclick="confirmarVinil()">Usar este precio</button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="result-area" style="display:none">
+      <div class="divider"></div>
+      <p class="sl">Datos del cliente</p>
+      <div class="campo"><label>Nombre completo <span style="color:var(--danger)">*</span></label><input class="inp" id="cl-nom" placeholder="Ej. Maria Gonzalez Perez" type="text"></div>
+      <div class="campo"><label>WhatsApp del cliente <span style="color:var(--danger)">*</span></label><div style="position:relative">
+        <input class="inp" id="cl-wa" placeholder="10 digitos: 5512345678" type="tel" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');updWA()">
+        <span id="wa-count" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted)">0/10</span>
+      </div>
+      <div id="wa-status" style="font-size:12px;margin-top:4px;display:none"></div></div>
+      <div class="campo">
+        <label>Cantidad de piezas</label>
+        <input class="inp" id="cl-qty" type="number" min="1" value="1" oninput="recalcQty()">
+      </div>
+      <div id="mayoreo-badge" style="display:none"></div>
+      <div class="desc-gerente">
+        <div class="desc-header">
+          <span class="desc-icon">🔑</span>
+          <span class="desc-title">Descuento gerente (opcional)</span>
+        </div>
+        <div class="desc-row">
+          <div class="desc-field">
+            <label>Tipo</label>
+            <select class="inp" id="desc-tipo" onchange="recalcQty()">
+              <option value="none">Sin descuento</option>
+              <option value="pct">Porcentaje (%)</option>
+              <option value="monto">Monto fijo ($)</option>
+            </select>
+          </div>
+          <div class="desc-field">
+            <label>Valor</label>
+            <input class="inp" id="desc-val" type="number" min="0" placeholder="0" oninput="recalcQty()" disabled>
+          </div>
+        </div>
+        <div id="desc-resultado" style="display:none"></div>
+      </div>
+      <!-- FACTURA -->
+      <div class="factura" id="factura">
+        <div class="fac-header">
+          <div class="fac-brand">Creaciones en Cromos</div>
+          <div class="fac-sub">Posters y Cuadros</div>
+          <div class="fac-date" id="fac-date"></div>
+          <div class="fac-vend">Atiende: <span id="fac-vend">-</span></div>
+        </div>
+        <div class="fac-cliente">
+          <div class="fac-cl-label">Cliente</div>
+          <div class="fac-cl-nom" id="fac-cl-nom">-</div>
+        </div>
+        <table class="fac-table">
+          <thead>
+            <tr><th>Descripcion</th><th>P. Unit</th><th>Cant</th><th>Total</th></tr>
+          </thead>
+          <tbody id="fac-body"></tbody>
+          <tfoot>
+            <tr id="fac-desc-row" style="display:none"><td colspan="3" class="fac-desc-label">Descuento mayoreo</td><td id="fac-desc-val" class="fac-total-val" style="color:var(--success)">-</td></tr>
+            <tr id="fac-desc-gte-row" style="display:none"><td colspan="3" class="fac-desc-label">Descuento autorizado</td><td id="fac-desc-gte-val" class="fac-total-val" style="color:var(--success)">-</td></tr>
+            <tr class="fac-total-row"><td colspan="3" class="fac-total-label">TOTAL</td><td class="fac-total-val" id="fac-total">-</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <!-- CARRITO -->
+      <div class="carrito-wrap" id="carrito-wrap" style="display:none">
+        <p class="carrito-title">Orden completa</p>
+        <div id="carrito-items"></div>
+        <div class="carrito-total">
+          <span class="carrito-total-label">Total orden</span>
+          <span class="carrito-total-val" id="carrito-total">$0</span>
+        </div>
+      </div>
+      <button class="btn-add-prod" onclick="agregarOtroProducto()">+ Agregar otro producto a esta orden</button>
+      <button class="btn bwa" onclick="enviarWA()">Enviar presupuesto por WhatsApp</button>
+      <button class="btn breset" onclick="resetCot()">Nueva cotizacion</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="page-admin">
+
+  <!-- RANGO DE FECHAS -->
+  <p class="sl" style="margin-top:0">Periodo</p>
+  <div class="fecha-row">
+    <div class="fecha-field">
+      <label>Desde</label>
+      <input class="inp" type="date" id="fecha-desde" onchange="renderAdmin()">
+    </div>
+    <div class="fecha-field">
+      <label>Hasta</label>
+      <input class="inp" type="date" id="fecha-hasta" onchange="renderAdmin()">
+    </div>
+    <button class="btn-fecha" onclick="setHoy()">Hoy</button>
+    <button class="btn-fecha" onclick="setMes()">Este mes</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stg" style="margin-top:14px">
+    <div class="st"><p class="sv" id="s-tot">0</p><p class="sk">Cotizaciones</p></div>
+    <div class="st"><p class="sv" id="s-mon">$0</p><p class="sk">Monto potencial</p></div>
+    <div class="st"><p class="sv" id="s-top">-</p><p class="sk">Mas cotizado</p></div>
+  </div>
+
+  <!-- GRAFICO VENDEDORES -->
+  <p class="sl">Cotizaciones por vendedor</p>
+  <div class="chart-wrap" id="chart-vendedores"></div>
+
+  <!-- FILTROS -->
+  <div class="adh" style="margin-top:16px"><p class="sl" style="margin:0">Historial</p><button class="clrbtn" onclick="clearLog()">Borrar todo</button></div>
+  <p class="sl" style="margin-top:8px">Por vendedor</p>
+  <div class="vftabs" id="vft">
+    <button class="vft active" onclick="fV('all',this)">Todos</button>
+    <button class="vft" onclick="fV('Maria',this)">Maria</button>
+    <button class="vft" onclick="fV('Minerva',this)">Minerva</button>
+    <button class="vft" onclick="fV('Myrna',this)">Myrna</button>
+    <button class="vft" onclick="fV('Emiliano',this)">Emiliano</button>
+    <button class="vft" onclick="fV('Nubia',this)">Nubia</button>
+    <button class="vft" onclick="fV('Cesar',this)">Cesar</button>
+    <button class="vft" onclick="fV('Diana',this)">Diana</button>
+    <button class="vft" onclick="fV('Ivan',this)">Ivan</button>
+  </div>
+  <p class="sl" style="margin-top:0">Por producto</p>
+  <div class="ftabs">
+    <button class="ft active" onclick="fP('all',this)">Todos</button>
+    <button class="ft" onclick="fP('neon',this)">Neon</button>
+    <button class="ft" onclick="fP('acrilico',this)">Acrilico</button>
+    <button class="ft" onclick="fP('resina',this)">Resina</button>
+    <button class="ft" onclick="fP('polioleo',this)">Polioleo</button>
+    <button class="ft" onclick="fP('vinil',this)">Vinil</button>
+  </div>
+  <div id="log-list"><div class="empty">Aun no hay cotizaciones</div></div>
+</div>
+
+<!-- MODAL CONTRASEÑA -->
+<div id="modal-pw" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:28px 24px;max-width:320px;width:90%;text-align:center;">
+    <p style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent);margin-bottom:6px">Panel Admin</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Ingresa la contrasena</p>
+    <input class="inp" id="pw-input" type="password" placeholder="Contrasena" style="text-align:center;font-size:18px;letter-spacing:4px;margin-bottom:12px" onkeydown="if(event.key==='Enter')checkPw()">
+    <p id="pw-error" style="font-size:12px;color:var(--danger);margin-bottom:10px;display:none">Contrasena incorrecta</p>
+    <button class="btn bwa" onclick="checkPw()" style="margin-top:0">Entrar</button>
+    <button class="btn breset" onclick="closePwModal()" style="margin-top:6px">Cancelar</button>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="page" id="page-config">
+  <p class="sl" style="margin-top:0">Vendedores</p>
+  <div class="cfg-section">
+    <div id="cfg-vendedores-list"></div>
+    <div class="cfg-add-row">
+      <input class="inp" id="cfg-vend-nuevo" placeholder="Nombre del vendedor" type="text">
+      <button class="cfg-save" onclick="agregarVendedor()">Agregar</button>
+    </div>
+  </div>
+
+  <p class="sl">Precios de linea — Cuadro Neon</p>
+  <div class="cfg-section" id="cfg-neon-precios"></div>
+
+  <p class="sl">Precios de linea — Letrero Acrilico</p>
+  <div class="cfg-section" id="cfg-acrilico-precios"></div>
+
+  <p class="sl">Precios de linea — Resina con Imagen de Linea</p>
+  <div class="cfg-section" id="cfg-resina-il-precios"></div>
+
+  <p class="sl">Precios — Resina con Imagen Personalizada (bastidor linea)</p>
+  <div class="cfg-section" id="cfg-resina-ic-precios"></div>
+
+  <p class="sl">Precios de linea — Polioleo</p>
+  <div class="cfg-section" id="cfg-polioleo-precios"></div>
+
+  <p class="sl">Impresiones en Vinil</p>
+  <div class="cfg-section">
+    <div class="cfg-item">
+      <span class="cfg-item-name">Precio menor a 1m² (por cm²)</span>
+      <input class="inp price-inp" type="number" step="0.01" id="price__vinil__pequeno" value="0.05">
+    </div>
+    <div class="cfg-item">
+      <span class="cfg-item-name">Precio mayor a 1m² (por m²)</span>
+      <input class="inp price-inp" type="number" id="price__vinil__grande" value="450">
+    </div>
+  </div>
+
+  <button class="btn bwa" style="margin-top:8px" onclick="guardarPrecios()">Guardar todos los precios</button>
+  <button class="btn breset" onclick="resetPrecios()" style="margin-top:6px">Restablecer precios originales</button>
+</div>
+
+<script>
+var WA="525540221172",NEG="Creaciones en Cromos, Posters y Cuadros";
+
+// SONIDOS
+var _actx=null;
+function getActx(){if(!_actx)_actx=new(window.AudioContext||window.webkitAudioContext)();return _actx;}
+function playClick(){
+  try{
+    var ctx=getActx();
+    var o=ctx.createOscillator();var g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.setValueAtTime(800,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(400,ctx.currentTime+0.05);
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.08);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.08);
+  }catch(e){}
+}
+function playSuccess(){
+  try{
+    var ctx=getActx();
+    var notas=[523,659,784];
+    notas.forEach(function(freq,i){
+      var o=ctx.createOscillator();var g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=freq;
+      var t=ctx.currentTime+i*0.12;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.2,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+      o.start(t);o.stop(t+0.18);
+    });
+  }catch(e){}
+}
+function playWA(){
+  try{
+    var ctx=getActx();
+    var notas=[784,1047];
+    notas.forEach(function(freq,i){
+      var o=ctx.createOscillator();var g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=freq;
+      var t=ctx.currentTime+i*0.15;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(0.25,t+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.22);
+      o.start(t);o.stop(t+0.22);
+    });
+  }catch(e){}
+}
+function playError(){
+  try{
+    var ctx=getActx();
+    var o=ctx.createOscillator();var g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sawtooth';o.frequency.value=200;
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.2);
+  }catch(e){}
+}
+var RL=6700/19,LAM3={a:1.09*2.20,p:816},LAM6={a:2.44*1.22,p:1931.40};
+var GS_URL="https://script.google.com/macros/s/AKfycby5mCCjtG4zfqwxOIFoYkjVZmgYsZVBze9F5DSEp7kaMPLTSsfZdl6qMSdcoeV0yVF2qw/exec";
+var GS_SHEET_ID="1TBpQtVgm0OziT_VmDlbPGx6Yyb14m859Xx_cUorT3tY";
+var VINIL_CM2=0.05,VINIL_M2=450;
+var LED=15,FIJO=607,HORA=92.57;
+LAM3.m2=LAM3.p/LAM3.a; LAM6.m2=LAM6.p/LAM6.a;
+
+var NEON_LINEA={
+  "4050-exh":{precio:1000,label:"Cuadro Neon 40x50 - Exhibicion",tag:"neon",_linea:true},
+  "4050-nom":{precio:1200,label:"Cuadro Neon 40x50 - Nombre/texto",tag:"neon",_linea:true},
+  "4050-fra":{precio:1600,label:"Cuadro Neon 40x50 - Frase/2 colores",tag:"neon",_linea:true},
+  "5686-exh":{precio:1500,label:"Cuadro Neon 56x86 - Exhibicion",tag:"neon",_linea:true},
+  "5686-nom":{precio:2200,label:"Cuadro Neon 56x86 - Nombre/texto",tag:"neon",_linea:true},
+  "5686-fra":{precio:2800,label:"Cuadro Neon 56x86 - Frase/2 colores",tag:"neon",_linea:true},
+  "5686-log":{precio:3500,label:"Cuadro Neon 56x86 - Logo/arte",tag:"neon",_linea:true},
+  "6080-exh":{precio:1500,label:"Cuadro Neon 60x80 - Exhibicion",tag:"neon",_linea:true},
+  "6080-nom":{precio:2200,label:"Cuadro Neon 60x80 - Nombre/texto",tag:"neon",_linea:true},
+  "6080-fra":{precio:2800,label:"Cuadro Neon 60x80 - Frase/2 colores",tag:"neon",_linea:true},
+  "6080-log":{precio:3500,label:"Cuadro Neon 60x80 - Logo/arte",tag:"neon",_linea:true}
+};
+var ACR_LINEA={
+  "50x20":{precio:950,label:"Letrero Acrilico 50x20 - 1 palabra",tag:"acrilico"},
+  "70x35":{precio:1500,label:"Letrero Acrilico 70x35 - Frase",tag:"acrilico"},
+  "70x50":{precio:2200,label:"Letrero Acrilico 70x50 - Palabra+icono",tag:"acrilico"},
+  "85x80":{precio:3200,label:"Letrero Acrilico 85x80 - Logo",tag:"acrilico"}
+};
+var RES_IL={
+  "20x25":{precio:300,label:"Resina c/Imagen Linea 20x25",tag:"resina",img:2.90,bast:22},
+  "28x40":{precio:400,label:"Resina c/Imagen Linea 28x40",tag:"resina",img:6.60,bast:17},
+  "40x50":{precio:650,label:"Resina c/Imagen Linea 40x50",tag:"resina",img:8.00,bast:47},
+  "56x86":{precio:1100,label:"Resina c/Imagen Linea 56x86",tag:"resina",img:12.50,bast:99}
+};
+var RES_IC={
+  "10x15":{precio:120,label:"Resina c/Imagen 10x15",tag:"resina",s:80,b:13,m:60},
+  "13x18":{precio:140,label:"Resina c/Imagen 13x18",tag:"resina",s:80,b:15,m:60},
+  "15x21":{precio:160,label:"Resina c/Imagen 15x21",tag:"resina",s:80,b:17,m:65},
+  "20x25":{precio:180,label:"Resina c/Imagen 20x25",tag:"resina",s:80,b:22,m:90},
+  "20x50":{precio:220,label:"Resina c/Imagen 20x50",tag:"resina",s:95,b:38,m:140},
+  "21x28":{precio:200,label:"Resina c/Imagen 21x28",tag:"resina",s:95,b:25,m:95},
+  "28x35":{precio:280,label:"Resina c/Imagen 28x35",tag:"resina",s:95,b:33,m:130},
+  "28x40":{precio:350,label:"Resina c/Imagen 28x40",tag:"resina",s:95,b:35,m:140},
+  "40x50":{precio:500,label:"Resina c/Imagen 40x50",tag:"resina",s:120,b:52,m:200},
+  "40x60":{precio:600,label:"Resina c/Imagen 40x60",tag:"resina",s:120,b:63,m:220},
+  "50x60":{precio:750,label:"Resina c/Imagen 50x60",tag:"resina",s:120,b:76,m:250},
+  "50x70":{precio:850,label:"Resina c/Imagen 50x70",tag:"resina",s:230,b:145,m:300},
+  "56x86":{precio:1200,label:"Resina c/Imagen 56x86",tag:"resina",s:230,b:99,m:420},
+  "60x80":{precio:1200,label:"Resina c/Imagen 60x80",tag:"resina",s:230,b:99,m:420},
+  "60x90":{precio:1350,label:"Resina c/Imagen 60x90",tag:"resina",s:230,b:143,m:420},
+  "70x100":{precio:1750,label:"Resina c/Imagen 70x100",tag:"resina",s:250,b:165,m:420}
+};
+var RES_SL={"28x40":{precio:400,label:"Resina sin Luz 28x40",tag:"resina"},"40x50":{precio:700,label:"Resina sin Luz 40x50",tag:"resina"},"56x86":{precio:1400,label:"Resina sin Luz 56x86",tag:"resina"},"60x80":{precio:1400,label:"Resina sin Luz 60x80",tag:"resina"}};
+var POL_L={"pl-20x25":{precio:60,label:"Polioleo Linea 20x25",tag:"polioleo"},"pl-28x40":{precio:90,label:"Polioleo Linea 28x40",tag:"polioleo"},"pl-40x50":{precio:150,label:"Polioleo Linea 40x50",tag:"polioleo"},"pl-56x86":{precio:250,label:"Polioleo Linea 56x86",tag:"polioleo"},"pl-56x86-may":{precio:230,label:"Polioleo Linea 56x86 Mayoreo (12+ pzas)",tag:"polioleo"}};
+var POL_C={"pc-28x40":{precio:150,label:"Polioleo Personalizado 28x40",tag:"polioleo"},"pc-40x50":{precio:250,label:"Polioleo Personalizado 40x50",tag:"polioleo"},"pc-56x86":{precio:480,label:"Polioleo Personalizado 56x86",tag:"polioleo"}};
+var TL={"neon":"Cuadro Neon","acrilico":"Letrero Acrilico","resina":"Cuadro Resina","polioleo":"Polioleo","vinil":"Impresion Vinil"};
+var TC={"neon":"bp-neon","acrilico":"bp-acrilico","resina":"bp-resina","polioleo":"bp-polioleo","vinil":"bp-vinil"};
+var NEON_COMP_EXTRA={"exh":0,"nom":0,"fra":600,"log":1800};
+
+var st={},cur=null,vend=null,fProd='all',fVend='all';
+
+// Build grids
+(function(){
+  var g=document.getElementById('res-il-grid');
+  g.innerHTML=Object.entries(RES_IL).map(function(e){
+    return '<div class="sc" onclick="selResIL(\''+e[0]+'\',this)"><div class="sct">'+e[0].replace('x','x')+' cm</div><div class="scp">$'+e[1].precio+'</div></div>';
+  }).join('');
+  var g2=document.getElementById('res-ic-grid');
+  g2.innerHTML=Object.entries(RES_IC).map(function(e){
+    return '<div class="sc" onclick="selResIC(\''+e[0]+'\',this)"><div class="sct">'+e[0].replace('x','x')+' cm</div><div class="scp">$'+e[1].precio+'</div></div>';
+  }).join('');
+})();
+
+var adminAuth=false;var _pendingTab=null;
+function showPage(id,el){
+  if((id==='admin'||id==='config')&&!adminAuth){
+    _pendingTab=el;
+    window._pendingPageId=id;
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-error').style.display='none';
+    document.getElementById('modal-pw').style.display='flex';
+    setTimeout(function(){document.getElementById('pw-input').focus();},100);
+    return;
+  }
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='admin'){
+    if(!document.getElementById('fecha-desde').value)setHoy();
+    else renderAdmin();
+  }
+  if(id==='config'){
+    renderCfgVendedores();
+    renderCfgPrecios();
+    renderVftabs();
+  }
+  if(id==='cotizador'){adminAuth=false;}
+}
+function checkPw(){
+  var pw=document.getElementById('pw-input').value;
+  if(pw==='admin'){
+    adminAuth=true;
+    document.getElementById('modal-pw').style.display='none';
+    showPage(window._pendingPageId||'admin',_pendingTab);
+  }else{
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+function closePwModal(){
+  document.getElementById('modal-pw').style.display='none';
+}
+
+var VCOLORS={'Maria':'#f472a8','Minerva':'#a78bfa','Myrna':'#34d399','Emiliano':'#60a5fa','Nubia':'#fbbf24','Cesar':'#f87171','Diana':'#38bdf8','Ivan':'#fb923c'};
+function selV(n,el){playClick();
+  vend=n;
+  document.querySelectorAll('#vg .o').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+  document.getElementById('bv').style.display='none';
+  document.getElementById('bp').style.display='block';
+  document.getElementById('vlabel').textContent=n;
+  var col=VCOLORS[n]||'var(--accent)';
+  var chip=document.getElementById('vchip-el');
+  chip.style.borderColor=col;
+  chip.style.color=col;
+  chip.style.background='rgba(255,255,255,0.05)';
+}
+function cambiarV(){
+  vend=null;
+  document.getElementById('bv').style.display='block';
+  document.getElementById('bp').style.display='none';
+  document.querySelectorAll('#vg .o').forEach(function(o){o.classList.remove('sel');});
+  resetSinV();
+}
+
+function selProd(p,el){playClick();
+  st={prod:p};
+  document.querySelectorAll('#pg .o').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+  ['neon','acrilico','resina','polioleo','vinil'].forEach(function(x){
+    var b=document.getElementById('b-'+x);
+    if(b)b.style.display=x===p?'block':'none';
+  });
+  document.getElementById('result-area').style.display='none';
+  // reset sub-opts
+  document.querySelectorAll('.o:not(#pg .o):not(#vg .o)').forEach(function(o){o.classList.remove('sel');});
+  document.querySelectorAll('.sc').forEach(function(c){c.classList.remove('sel');});
+  hideAll(['neon-linea','neon-custom','neon-custom-res','acr-linea','acr-custom','acr-custom-res',
+    'res-img-linea','res-img-custom','res-ic-linea','res-ic-medida','ric-res',
+    'pol-linea','pol-custom','pol-c-linea','pol-c-custom','pc-res','vn-res']);
+}
+
+function sO(gid,el,val){playClick();
+  document.querySelectorAll('#'+gid+' .o').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+  // NEON
+  if(gid==='neon-tipo'){
+    show('neon-linea',val==='linea');show('neon-custom',val==='custom');
+    hideAll(['neon-custom-res']);
+    document.getElementById('result-area').style.display='none';
+  }
+  if(gid==='neon-linea-opts'){showR(NEON_LINEA[val]);}
+  if(gid==='neon-comp'){calcNeon();}
+  // ACRILICO
+  if(gid==='acr-tipo'){
+    show('acr-linea',val==='linea');show('acr-custom',val==='custom');
+    hideAll(['acr-custom-res']);
+    document.getElementById('result-area').style.display='none';
+  }
+  if(gid==='acr-linea-opts'){showR(ACR_LINEA[val]);}
+  // RESINA
+  if(gid==='res-tipo'){
+    hideAll(['res-sin-luz','res-img-linea','res-img-custom']);
+    document.getElementById('result-area').style.display='none';
+    if(val==='img-linea')document.getElementById('res-img-linea').style.display='block';
+    if(val==='img-custom')document.getElementById('res-img-custom').style.display='block';
+  }
+  if(gid==='res-sl-opts'){showR(RES_SL[val]);}
+  if(gid==='res-ic-tipo'){
+    show('res-ic-linea',val==='linea');show('res-ic-medida',val==='custom');
+    hideAll(['ric-res']);document.getElementById('result-area').style.display='none';
+  }
+  // POLIOLEO
+  if(gid==='pol-tipo'){
+    show('pol-linea',val==='linea');show('pol-custom',val==='custom');
+    hideAll(['pol-c-linea','pol-c-custom','pc-res']);
+    document.getElementById('result-area').style.display='none';
+  }
+  if(gid==='pol-l-opts'){showR(POL_L[val]);}
+  if(gid==='pol-c-tipo'){
+    show('pol-c-linea',val==='linea');show('pol-c-custom',val==='custom');
+    hideAll(['pc-res']);document.getElementById('result-area').style.display='none';
+  }
+  if(gid==='pol-cl-opts'){showR(POL_C[val]);}
+}
+
+function selResIL(tam,el){
+  document.querySelectorAll('#res-il-grid .sc').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  showR(RES_IL[tam]);
+}
+function selResIC(tam,el){
+  document.querySelectorAll('#res-ic-grid .sc').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  showR(RES_IC[tam]);
+}
+
+function calcNeon(){
+  var w=parseFloat(document.getElementById('nc-w').value);
+  var h=parseFloat(document.getElementById('nc-h').value);
+  var compSel=document.querySelector('#neon-comp .o.sel');
+  if(!w||!h||!compSel){document.getElementById('neon-custom-res').style.display='none';return;}
+  var comp=compSel.getAttribute('onclick').match(/'([^']+)'\)/)[1];
+  var area=(w/100)*(h/100);
+  var grande=area>1.0;
+  var mult=grande?2:1;
+  var bast=w*h*0.06;
+  var vinil=area*210*mult;
+  var resina=area*(6700/19)*mult;
+  var led=(area<=0.30?2:area<=1.0?4:8)*LED*mult;
+  var otros=(100+30)*mult;
+  var mo=HORA*(area<=0.50?0.5:area<=1.0?1:2)*mult;
+  var costo_base=bast+vinil+resina+led+otros+mo+FIJO;
+  var extra=NEON_COMP_EXTRA[comp]||0;
+  var total=Math.round((costo_base+extra)/0.50);
+  document.getElementById('nc-precio').textContent='$'+total.toLocaleString('es-MX');
+  document.getElementById('nc-area').textContent=area.toFixed(4)+' m²';
+  document.getElementById('nc-mat').textContent='$'+Math.round(bast+vinil+resina+led+otros).toLocaleString('es-MX');
+  document.getElementById('nc-comp').textContent=extra>0?'+$'+extra.toLocaleString('es-MX'):'Incluido';
+  document.getElementById('nc-nota').textContent=grande?'Mayor a 1m2: materiales dobles':'Estandar';
+  document.getElementById('neon-custom-res').style.display='block';
+  var compLabels={"exh":"Exhibicion","nom":"Nombre/texto","fra":"Frase/2 colores","log":"Logo/arte"};
+  window._neonC={precio:total,label:'Cuadro Neon '+w+'x'+h+' cm - '+compLabels[comp],tag:'neon'};
+}
+function confirmarNeonCustom(){if(window._neonC)showR(window._neonC);}
+
+function calcAcr(){
+  var w=parseFloat(document.getElementById('ac-w').value);
+  var h=parseFloat(document.getElementById('ac-h').value);
+  if(!w||!h){document.getElementById('acr-custom-res').style.display='none';return;}
+  var area=(w/100)*(h/100);
+  var grande=area>1.0;
+  var lam=area<=LAM3.a?LAM3:LAM6;
+  var acr=(area/lam.a)*lam.p;
+  var led_m=area<=0.25?2:area<=0.60?3:area<=1.0?4:8;
+  var led_c=led_m*LED*(grande?2:1);
+  var horas=area<=0.50?1:area<=1.0?3:6;
+  var mo=horas*HORA;
+  var cv=acr+led_c+mo;
+  var ct=cv+FIJO;
+  var total=Math.round(ct/0.50*1.6113/50)*50;
+  document.getElementById('ac-precio').textContent='$'+total.toLocaleString('es-MX');
+  document.getElementById('ac-area').textContent=area.toFixed(4)+' m²';
+  document.getElementById('ac-acr').textContent='$'+Math.round(acr)+' ('+lam.p+'pesos/lamina '+(lam===LAM3?'3mm':'6mm')+')';
+  document.getElementById('ac-led').textContent='$'+Math.round(led_c)+' ('+led_m+'m'+(grande?' x2':'')+')'
+  document.getElementById('ac-mo').textContent='$'+Math.round(mo)+' ('+horas+'h'+(grande?' - doble':'')+')';
+  document.getElementById('ac-nota').textContent=grande?'Mayor a 1m2: horas y LED dobles':'Estandar';
+  document.getElementById('acr-custom-res').style.display='block';
+  window._acrC={precio:total,label:'Letrero Acrilico '+w+'x'+h+' cm personalizado',tag:'acrilico'};
+}
+function confirmarAcrCustom(){if(window._acrC)showR(window._acrC);}
+
+function calcResImg(){
+  var w=parseFloat(document.getElementById('ric-w').value);
+  var h=parseFloat(document.getElementById('ric-h').value);
+  if(!w||!h){document.getElementById('ric-res').style.display='none';return;}
+  var area=(w/100)*(h/100);
+  var bast=Math.round(w*h*0.06);
+  var resina=Math.round(area*RL);
+  var mat=Math.round(resina*1.35);
+  var serv=area<=0.0625?80:area<=0.30?120:230;
+  var base=serv+bast+mat;
+  var total=Math.round(base*2.5148/50)*50;
+  document.getElementById('ric-precio').textContent='$'+total.toLocaleString('es-MX');
+  document.getElementById('ric-serv').textContent='$'+serv;
+  document.getElementById('ric-bast').textContent='$'+bast.toLocaleString('es-MX');
+  document.getElementById('ric-mat').textContent='$'+mat.toLocaleString('es-MX');
+  document.getElementById('ric-res').style.display='block';
+  window._ricC={precio:total,label:'Resina c/Imagen '+w+'x'+h+' cm especial',tag:'resina',s:serv,b:bast,m:mat};
+}
+function confirmarResImgCustom(){
+  if(!window._ricC)return;
+  showR(window._ricC);
+}
+
+function calcPolCustom(){
+  var w=parseFloat(document.getElementById('pc-w').value);
+  var h=parseFloat(document.getElementById('pc-h').value);
+  if(!w||!h){document.getElementById('pc-res').style.display='none';return;}
+  var bast=Math.round(w*h*0.06);
+  var area=(w/100)*(h/100);
+  var peg=Math.round((area/0.4816)*55);
+  var pigmento=Math.round((area/0.4816)*29);
+  var mat=peg+pigmento;
+  var mo=Math.round(HORA*0.25);
+  var ct=bast+mat+mo+FIJO;
+  var total=Math.round(ct/0.50*0.80);
+  document.getElementById('pc-precio').textContent='$'+total.toLocaleString('es-MX');
+  document.getElementById('pc-bast').textContent='$'+bast;
+  document.getElementById('pc-mat').textContent='$'+mat;
+  document.getElementById('pc-mo').textContent='$'+mo;
+  document.getElementById('pc-res').style.display='block';
+  window._polC={precio:total,label:'Polioleo Personalizado '+w+'x'+h+' cm',tag:'polioleo'};
+}
+function confirmarPolCustom(){if(window._polC)showR(window._polC);}
+
+function calcVinil(){
+  var w=parseFloat(document.getElementById('vn-w').value);
+  var h=parseFloat(document.getElementById('vn-h').value);
+  if(!w||!h){document.getElementById('vn-res').style.display='none';return;}
+  var area_m2=(w/100)*(h/100);
+  var precio;
+  if(area_m2<1.0){
+    precio=Math.round(w*h*VINIL_CM2);
+  }else{
+    precio=Math.round(area_m2*VINIL_M2);
+  }
+  var tamaño=area_m2<1.0?'Pequeno (menos de 1m²)':'Grande (mas de 1m²)';
+  document.getElementById('vn-precio').textContent='$'+precio.toLocaleString('es-MX');
+  document.getElementById('vn-area').textContent=area_m2.toFixed(4)+' m² — '+tamaño;
+  document.getElementById('vn-res').style.display='block';
+  window._vinC={precio:precio,label:'Impresion Vinil '+w+'x'+h+' cm',tag:'vinil'};
+}
+function confirmarVinil(){if(window._vinC)showR(window._vinC);}
+
+function showR(r,des){
+  playSuccess();
+  cur=r;
+  cur._des=des||null;
+  document.getElementById('cl-qty').value=1;
+  document.getElementById('mayoreo-badge').style.display='none';
+  // Si hay edicion activa, prellenar datos del cliente
+  if(window._editando){
+    document.getElementById('cl-nom').value=window._editando.cliente||'';
+    document.getElementById('cl-wa').value=window._editando.wa||'';
+    if(window._editando.wa)updWA();
+  }
+  renderFactura();
+  document.getElementById('result-area').style.display='block';
+  // update client name live
+  document.getElementById('cl-nom').oninput=function(){
+    document.getElementById('fac-cl-nom').textContent=this.value||'-';
+  };
+}
+
+function recalcQty(){
+  var tipo=document.getElementById('desc-tipo').value;
+  var dv=document.getElementById('desc-val');
+  dv.disabled=(tipo==='none');
+  if(tipo==='none')dv.value='';
+  renderFactura();
+}
+
+function renderFactura(){
+  if(!cur)return;
+  var qty=parseInt(document.getElementById('cl-qty').value)||1;
+  var nom=document.getElementById('cl-nom').value.trim();
+  var esMayoreoNeon=cur.tag==='neon'&&cur._linea===true&&qty>=4;
+  var precioUnit=cur.precio;
+  var descPct=0;
+  if(esMayoreoNeon){descPct=10;}
+
+  var subtotal=precioUnit*qty;
+  var descMonto=Math.round(subtotal*descPct/100);
+
+  // Descuento gerente
+  var tipo=document.getElementById('desc-tipo').value;
+  var dval=parseFloat(document.getElementById('desc-val').value)||0;
+  var descGte=0;
+  if(tipo==='pct'&&dval>0){descGte=Math.round((subtotal-descMonto)*dval/100);}
+  else if(tipo==='monto'&&dval>0){descGte=dval;}
+
+  var total=subtotal-descMonto-descGte;
+
+  var dresEl=document.getElementById('desc-resultado');
+  if(descGte>0){
+    dresEl.textContent='Descuento aplicado: -$'+descGte.toLocaleString('es-MX')+(tipo==='pct'?' ('+dval+'%)':'');
+    dresEl.style.display='block';
+  }else{dresEl.style.display='none';}
+
+  // header
+  var now=new Date();
+  var fecha=now.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  var hora=now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('fac-date').textContent=fecha+' - '+hora;
+  document.getElementById('fac-vend').textContent=vend||'-';
+  document.getElementById('fac-cl-nom').textContent=nom||'(pendiente)';
+
+  // tabla
+  var des=cur._des?'<br><span style="font-size:11px;color:#999">'+cur._des.replace(/<[^>]+>/g,'').replace(/\$/g,'$').substring(0,80)+'</span>':'';
+  document.getElementById('fac-body').innerHTML=
+    '<tr><td>'+cur.label+des+'</td><td>$'+precioUnit.toLocaleString('es-MX')+'</td><td>'+qty+'</td><td>$'+subtotal.toLocaleString('es-MX')+'</td></tr>';
+
+  // descuento
+  var drow=document.getElementById('fac-desc-row');
+  if(descMonto>0){
+    drow.style.display='';
+    document.getElementById('fac-desc-val').textContent='-$'+descMonto.toLocaleString('es-MX')+' ('+descPct+'% mayoreo)';
+  }else{drow.style.display='none';}
+
+  // Fila descuento gerente
+  var dgte=document.getElementById('fac-desc-gte-row');
+  if(descGte>0){
+    dgte.style.display='';
+    document.getElementById('fac-desc-gte-val').textContent='-$'+descGte.toLocaleString('es-MX')+(tipo==='pct'?' ('+dval+'%)':'');
+  }else{dgte.style.display='none';}
+
+  document.getElementById('fac-total').textContent='$'+total.toLocaleString('es-MX');
+
+  // badge mayoreo
+  var badge=document.getElementById('mayoreo-badge');
+  if(esMayoreoNeon){
+    badge.innerHTML='<div class="may-badge">Precio mayoreo aplicado: 10% de descuento por '+qty+' piezas</div>';
+    badge.style.display='block';
+  }else if(cur.tag==='neon'&&cur._linea===true&&qty>=2&&qty<4){
+    badge.innerHTML='<div class="may-badge" style="background:rgba(232,168,74,.1);color:#854F0B;border-color:rgba(232,168,74,.3)">Agrega '+(4-qty)+' pieza(s) mas para obtener 10% de descuento</div>';
+    badge.style.display='block';
+  }else{badge.style.display='none';}
+
+  cur._qty=qty;cur._total=total;cur._desc=descMonto;cur._descGte=descGte;cur._punit=precioUnit;cur._tipo=tipo;cur._dval=dval;
+}
+
+function enviarWA(){
+  if(!cur)return;
+  var nom=document.getElementById('cl-nom').value.trim();
+  var wac=document.getElementById('cl-wa').value.trim().replace(/[^0-9]/g,'');
+  if(!nom){alert('Por favor ingresa el nombre del cliente.');document.getElementById('cl-nom').focus();return;}
+  if(!wac||wac.length!==10){playError();alert('El WhatsApp debe tener exactamente 10 digitos. Ejemplo: 5512345678');document.getElementById('cl-wa').focus();return;}
+  renderFactura();
+  var qty=cur._qty||1;
+  var punit=cur._punit||cur.precio;
+  var subtotal=punit*qty;
+  var desc=cur._desc||0;
+  var total=cur._total||cur.precio;
+  var dgte=cur._descGte||0;
+  var msg='Hola '+nom+'! Muchas gracias por tu interes. Aqui tu cotizacion de *'+NEG+'*:\n\n';
+  if(carrito.length>0){
+    var todosProd=[{label:cur.label,total:total,qty:qty}].concat(carrito);
+    var granTotal=todosProd.reduce(function(s,p){return s+p.total;},0)-dgte;
+    todosProd.forEach(function(p,i){
+      msg+=(i+1)+'. *'+p.label+'*'+(p.qty>1?' (x'+p.qty+')':'')+' - $'+p.total.toLocaleString('es-MX')+' MXN\n';
+    });
+    if(dgte>0)msg+='Descuento autorizado: -$'+dgte.toLocaleString('es-MX')+'\n';
+    msg+='\n*TOTAL ORDEN: $'+granTotal.toLocaleString('es-MX')+' MXN*\n\n';
+    saveLog({label:'Orden '+todosProd.length+' prod.',precio:granTotal,tag:cur.tag,_linea:cur._linea||false,_editTs:cur._editTs||null,_total:granTotal},nom,wac);
+  } else {
+    if(qty>1){msg+='Producto: *'+cur.label+'*\nCantidad: '+qty+' piezas\nPrecio unitario: $'+punit.toLocaleString('es-MX')+'\nSubtotal: $'+subtotal.toLocaleString('es-MX')+'\n';}
+    else{msg+='Producto: *'+cur.label+'*\n';}
+    if(desc>0)msg+='Descuento mayoreo: -$'+desc.toLocaleString('es-MX')+'\n';
+    if(dgte>0)msg+='Descuento autorizado: -$'+dgte.toLocaleString('es-MX')+'\n';
+    msg+='*TOTAL: $'+total.toLocaleString('es-MX')+' MXN*\n\n';
+    saveLog(cur,nom,wac);
+  }
+  msg+='Incluye materiales de primera calidad y acabado profesional.\nTienes alguna pregunta o quieres confirmar tu pedido?';
+  var num=wac.length===10?'52'+wac:wac;
+  playWA();
+  carrito=[];renderCarrito();
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function resetSinV(){
+  st={};cur=null;
+  document.querySelectorAll('.o:not(#pg .o):not(#vg .o),.sc').forEach(function(o){o.classList.remove('sel');});
+  document.querySelectorAll('#pg .o').forEach(function(o){o.classList.remove('sel');});
+  ['neon','acrilico','resina','polioleo','vinil'].forEach(function(x){var b=document.getElementById('b-'+x);if(b)b.style.display='none';});
+  hideAll(['neon-linea','neon-custom','neon-custom-res','acr-linea','acr-custom','acr-custom-res',
+    'res-img-linea','res-img-custom','res-ic-linea','res-ic-medida','ric-res',
+    'pol-linea','pol-custom','pol-c-linea','pol-c-custom','pc-res','vn-res']);
+  document.getElementById('result-area').style.display='none';
+  ['cl-nom','cl-wa','nc-w','nc-h','ac-w','ac-h','ric-w','ric-h','pc-w','pc-h','vn-w','vn-h'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+}
+function resetCot(){
+  playClick();
+  carrito=[];
+  renderCarrito();
+  resetSinV();
+  vend=null;
+  document.querySelectorAll('#vg .o').forEach(function(o){o.classList.remove('sel');});
+  document.getElementById('bv').style.display='block';
+  document.getElementById('bp').style.display='none';
+}
+
+function show(id,v){var e=document.getElementById(id);if(e)e.style.display=v?'block':'none';}
+function hideAll(ids){ids.forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});}
+
+function getLogs(){try{return JSON.parse(localStorage.getItem('cl')||'[]');}catch{return[];}}
+function saveLogs(l){try{localStorage.setItem('cl',JSON.stringify(l));}catch{}}
+function enviarAGoogleSheets(data){
+  try{
+    // Usar URL con parametros GET para evitar CORS
+    var params=Object.assign({sheetId:GS_SHEET_ID},data);
+    var qs=Object.keys(params).map(function(k){
+      return encodeURIComponent(k)+'='+encodeURIComponent(params[k]||'');
+    }).join('&');
+    var img=new Image();
+    img.src=GS_URL+'?'+qs;
+    // También intentar fetch como respaldo
+    fetch(GS_URL+'?'+qs,{method:'GET',mode:'no-cors'}).catch(function(){});
+  }catch(e){console.log('GS error:',e);}
+}
+
+function getNextCtrl(){
+  var logs=getLogs();
+  var max=0;
+  logs.forEach(function(l){if(l.ctrl&&l.ctrl>max)max=l.ctrl;});
+  return max+1;
+}
+function saveLog(r,nom,wa){
+  var logs=getLogs();
+  // Si hay edicion activa, actualizar en lugar de duplicar
+  if(window._editando){
+    var ed=window._editando;
+    var idx=logs.findIndex(function(x){return x.ts===ed.ts;});
+    if(idx>=0){
+      logs[idx].precio=r._total||r.precio;
+      logs[idx].cliente=nom||null;
+      logs[idx].wa=wa||null;
+      logs[idx].label=r.label;
+      logs[idx].tag=r.tag;
+      saveLogs(logs);
+      window._editando=null;
+      document.getElementById('edit-banner').style.display='none';
+      return;
+    }
+  }
+  // Nueva cotizacion
+  var ctrl=getNextCtrl();
+  var now=new Date();
+  var entry={
+    label:r.label,precio:r._total||r.precio,tag:r.tag,
+    ts:now.toISOString(),vendedor:vend||'-',
+    cliente:nom||null,wa:wa||null,
+    _linea:r._linea||false,ctrl:ctrl
+  };
+  logs.unshift(entry);
+  saveLogs(logs.slice(0,500));
+  // Enviar a Google Sheets
+  enviarAGoogleSheets({
+    fecha:now.toLocaleDateString('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}),
+    hora:now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}),
+    vendedor:vend||'-',
+    cliente:nom||'-',
+    wa:wa||'-',
+    producto:r.label,
+    categoria:TL[r.tag]||r.tag,
+    precio:r._punit||r.precio,
+    cantidad:r._qty||1,
+    total:r._total||r.precio,
+    ctrl:ctrl
+  });
+}
+function setHoy(){
+  var h=new Date().toISOString().split('T')[0];
+  document.getElementById('fecha-desde').value=h;
+  document.getElementById('fecha-hasta').value=h;
+  renderAdmin();
+}
+function setMes(){
+  var n=new Date();
+  var desde=new Date(n.getFullYear(),n.getMonth(),1).toISOString().split('T')[0];
+  var hasta=new Date(n.getFullYear(),n.getMonth()+1,0).toISOString().split('T')[0];
+  document.getElementById('fecha-desde').value=desde;
+  document.getElementById('fecha-hasta').value=hasta;
+  renderAdmin();
+}
+function getLogsRango(){
+  var logs=getLogs();
+  var desde=document.getElementById('fecha-desde')?document.getElementById('fecha-desde').value:'';
+  var hasta=document.getElementById('fecha-hasta')?document.getElementById('fecha-hasta').value:'';
+  if(!desde&&!hasta)return logs;
+  return logs.filter(function(l){
+    var d=l.ts.split('T')[0];
+    if(desde&&d<desde)return false;
+    if(hasta&&d>hasta)return false;
+    return true;
+  });
+}
+var fProd='all',fVend='all';
+function fP(t,el){fProd=t;document.querySelectorAll('.ft').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderLogList();}
+function fV(v,el){fVend=v;document.querySelectorAll('.vft').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderLogList();}
+function renderAdmin(){
+  var lh=getLogsRango();
+  var mon=lh.reduce(function(s,l){return s+l.precio;},0);
+  var freq={};lh.forEach(function(l){freq[l.tag]=(freq[l.tag]||0)+1;});
+  var top=Object.entries(freq).sort(function(a,b){return b[1]-a[1];})[0];
+  document.getElementById('s-tot').textContent=lh.length;
+  document.getElementById('s-mon').textContent=lh.length?'$'+mon.toLocaleString('es-MX'):'$0';
+  document.getElementById('s-top').textContent=top?TL[top[0]]:'-';
+  renderGrafico(lh);
+  renderLogList();
+}
+function renderGrafico(lh){
+  var vendedores=['Maria','Minerva','Myrna','Emiliano','Nubia','Cesar','Diana','Ivan'];
+  var conteo={};vendedores.forEach(function(v){conteo[v]=0;});
+  lh.forEach(function(l){if(conteo[l.vendedor]!==undefined)conteo[l.vendedor]++;});
+  var datos=vendedores.map(function(v){return{name:v,val:conteo[v]};}).filter(function(d){return d.val>0;}).sort(function(a,b){return b.val-a.val;});
+  var wrap=document.getElementById('chart-vendedores');
+  if(!datos.length){wrap.innerHTML='<div class="chart-empty">Sin datos en este periodo</div>';return;}
+  var max=datos[0].val;
+  wrap.innerHTML=datos.map(function(d){
+    var pct=Math.round((d.val/max)*100);
+    var col=VCOLORS[d.name]||'#f472a8';
+    var monto=lh.filter(function(l){return l.vendedor===d.name;}).reduce(function(s,l){return s+l.precio;},0);
+    return '<div class="chart-bar-row">'+
+      '<div class="chart-name">'+d.name+'</div>'+
+      '<div class="chart-bar-track">'+
+        '<div class="chart-bar-fill" style="width:'+pct+'%;background:'+col+'">'+
+          '<span class="chart-bar-val">'+d.val+' | $'+monto.toLocaleString('es-MX')+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+function renderLogList(){
+  var logs=getLogsRango();
+  var f=logs.filter(function(l){return(fProd==='all'||l.tag===fProd)&&(fVend==='all'||l.vendedor===fVend);});
+  var list=document.getElementById('log-list');
+  if(!f.length){list.innerHTML='<div class="empty">Sin cotizaciones</div>';return;}
+  list.innerHTML=f.map(function(l){
+    var d=new Date(l.ts);
+    var fecha=d.toLocaleDateString('es-MX',{day:'2-digit',month:'short'});
+    var hora=d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    return '<div class="le">'+
+      '<div class="lei" style="overflow:hidden">'+
+        '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+
+          (l.ctrl?'<span style="font-size:10px;color:var(--accent);margin-right:4px">#'+l.ctrl+'</span>':'')+
+          l.label+
+          '<span class="bp '+TC[l.tag]+'">'+TL[l.tag]+'</span>'+
+          '<span class="lev">'+l.vendedor+'</span>'+
+        '</div>'+
+        '<div class="lem">'+(l.cliente?l.cliente+' · ':'')+fecha+' · '+hora+(l.wa?' · '+l.wa:'')+'</div>'+
+      '</div>'+
+      '<div class="lep">$'+l.precio.toLocaleString('es-MX')+'</div>'+
+    '</div>';
+  }).join('');
+}
+function clearLog(){if(confirm('Borrar todo el historial?')){saveLogs([]);renderAdmin();}}
+
+function updWA(){
+  var v=document.getElementById('cl-wa').value.replace(/[^0-9]/g,'');
+  var cnt=document.getElementById('wa-count');
+  var st=document.getElementById('wa-status');
+  cnt.textContent=v.length+'/10';
+  cnt.style.color=v.length===10?'var(--success)':'var(--muted)';
+  if(v.length===0){st.style.display='none';}
+  else if(v.length===10){st.innerHTML='<span class="wa-ok">Numero valido</span>';st.style.display='block';}
+  else{st.innerHTML='<span class="wa-err">Faltan '+(10-v.length)+' digitos</span>';st.style.display='block';}
+}
+
+function toggleMisCots(){
+  var list=document.getElementById('mis-cots-list');
+  var btn=document.getElementById('btn-mis-cots');
+  if(list.style.display==='none'){
+    renderMisCots();
+    list.style.display='block';
+    btn.textContent='Ocultar';
+  }else{
+    list.style.display='none';
+    btn.textContent='Ver';
+  }
+}
+
+function getMiasCots(query){
+  var logs=getLogs();
+  var mias=logs.filter(function(l){return l.vendedor===vend;});
+  if(query){
+    var q=query.toLowerCase();
+    mias=mias.filter(function(l){
+      return (l.cliente&&l.cliente.toLowerCase().indexOf(q)>=0)||
+             (l.wa&&l.wa.indexOf(q)>=0)||
+             (l.ctrl&&l.ctrl.toString().indexOf(q)>=0)||
+             (l.ts&&l.ts.substr(0,10).indexOf(q)>=0);
+    });
+  }
+  return mias;
+}
+
+function renderMisCots(){
+  var searchEl=document.getElementById('mc-search');
+  var query=searchEl?searchEl.value.trim():'';
+  var mias=getMiasCots(query);
+  var list=document.getElementById('mis-cots-inner');
+  if(!mias.length){
+    list.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 0">Sin cotizaciones'+(query?' para "'+query+'"':'')+'</div>';
+    return;
+  }
+  list.innerHTML=mias.map(function(l){
+    var d=new Date(l.ts);
+    var fecha=d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+    var hora=d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    var ctrl=l.ctrl||'--';
+    var nombre=l.cliente||'Sin nombre';
+    var precio='$'+l.precio.toLocaleString('es-MX');
+    var editBtn='<button class="mc-btn mc-btn-edit" onclick="mcAction(this)">Editar</button>';
+    var waBtn=l.wa?'<button class="mc-btn mc-btn-wa" onclick="mcAction(this)">WA</button>':'';
+    return '<div class="mc-item" data-ts="'+l.ts+'" data-action="">'+
+      '<div class="mc-info">'+
+        '<div class="mc-label"><span style="font-size:10px;color:var(--accent);margin-right:4px">#'+ctrl+'</span>'+l.label+'</div>'+
+        '<div class="mc-meta">'+nombre+(l.wa?' &middot; '+l.wa:'')+' &middot; '+fecha+' '+hora+'</div>'+
+      '</div>'+
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+
+        '<div class="mc-price">'+precio+'</div>'+
+        '<div class="mc-btns">'+editBtn+waBtn+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function mcAction(btn){
+  var item=btn.closest('[data-ts]');
+  var ts=item.getAttribute('data-ts');
+  if(btn.textContent==='Editar') reabrirCot(ts);
+  else reenviarWA(ts);
+}
+function reabrirCot(ts){
+  var logs=getLogs();
+  var l=logs.find(function(x){return x.ts===ts;});
+  if(!l)return;
+  // Guardar datos de la cotizacion a editar
+  window._editando={ts:ts,cliente:l.cliente||'',wa:l.wa||'',ctrl:l.ctrl};
+  // Mostrar banner de edicion
+  document.getElementById('edit-banner').style.display='block';
+  document.getElementById('edit-banner-ctrl').textContent='#'+(l.ctrl||'--');
+  document.getElementById('edit-banner-label').textContent=l.label;
+  // Resetear al cotizador desde cero manteniendo vendedor
+  resetSinV();
+  // Cerrar lista de cotizaciones
+  document.getElementById('mis-cots-list').style.display='none';
+  document.getElementById('btn-mis-cots').textContent='Ver';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function cancelarEdicion(){
+  window._editando=null;
+  document.getElementById('edit-banner').style.display='none';
+}
+
+function reenviarWA(ts){
+  var logs=getLogs();
+  var l=logs.find(function(x){return x.ts===ts;});
+  if(!l||!l.wa)return;
+  playWA();
+  var ctrl=l.ctrl?'#'+l.ctrl+' · ':'';
+  var msg='Hola '+(l.cliente||'')+'! Muchas gracias por tu interes.\n\nAqui esta tu cotizacion de *'+NEG+'*:\n\n'+ctrl+'Producto: *'+l.label+'*\n*TOTAL: $'+l.precio.toLocaleString('es-MX')+' MXN*\n\nTodos nuestros productos incluyen materiales de primera calidad y acabado profesional.\nTienes alguna pregunta o deseas confirmar tu pedido?';
+  var num=l.wa.length===10?'52'+l.wa:l.wa;
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// Inicializar app
+(function init(){
+  try{var p=localStorage.getItem('cl_precios');if(p){PRECIOS_OVERRIDE=JSON.parse(p);aplicarOverrides();}}catch{}
+  buildResinaGrids();
+  setTimeout(function(){renderVendedoresGrid();},0);
+})();
+
+// === FUNCIONES ADICIONALES ===
+// =============================================
+// VENDEDORES DINAMICOS
+// =============================================
+var VENDEDORES_DEFAULT=['Maria','Minerva','Myrna','Emiliano','Nubia','Cesar','Diana','Ivan'];
+function getVendedores(){
+  try{var v=localStorage.getItem('cl_vendedores');return v?JSON.parse(v):VENDEDORES_DEFAULT;}catch{return VENDEDORES_DEFAULT;}
+}
+function saveVendedores(v){try{localStorage.setItem('cl_vendedores',JSON.stringify(v));}catch{}}
+
+function renderVendedoresGrid(){
+  var vends=getVendedores();
+  var grid=document.getElementById('vg');
+  if(!grid)return;
+  var colores=['vc-1','vc-2','vc-3','vc-4','vc-5','vc-6','vc-7','vc-8','vc-1','vc-2'];
+  var colorHex=['#f472a8','#a78bfa','#34d399','#60a5fa','#fbbf24','#f87171','#38bdf8','#fb923c','#f472a8','#a78bfa'];
+  vends.forEach(function(v,i){VCOLORS[v]=colorHex[i%10];});
+  grid.innerHTML=vends.map(function(v,i){
+    var div=document.createElement('div');
+    div.className='o '+colores[i%10];
+    div.textContent=v;
+    div.onclick=(function(name){return function(){selV(name,this);};})(v);
+    return div.outerHTML;
+  }).join('');
+  // Re-attach onclick properly
+  grid.querySelectorAll('.o').forEach(function(el,i){
+    var name=vends[i];
+    el.onclick=function(){selV(name,el);};
+  });
+}
+
+
+function renderCfgVendedores(){
+  var vends=getVendedores();
+  var el=document.getElementById('cfg-vendedores-list');
+  if(!el)return;
+  el.innerHTML=vends.map(function(v,i){
+    return '<div class="cfg-item"><span class="cfg-item-name">'+v+'</span><button class="cfg-del" onclick="eliminarVendedor('+i+')">✕</button></div>';
+  }).join('');
+}
+
+function agregarVendedor(){
+  var nom=document.getElementById('cfg-vend-nuevo').value.trim();
+  if(!nom){alert('Escribe el nombre del vendedor.');return;}
+  var v=getVendedores();
+  if(v.indexOf(nom)>=0){alert('Este vendedor ya existe.');return;}
+  v.push(nom);
+  saveVendedores(v);
+  document.getElementById('cfg-vend-nuevo').value='';
+  renderCfgVendedores();
+  renderVendedoresGrid();
+  renderVftabs();
+  // Feedback
+  var el=document.getElementById('cfg-vend-nuevo');
+  el.placeholder=nom+' agregado correctamente';
+  setTimeout(function(){el.placeholder='Nombre del vendedor';},2000);
+}
+
+function eliminarVendedor(idx){
+  var v=getVendedores();
+  if(!confirm('Eliminar a '+v[idx]+'? Sus cotizaciones guardadas no se borran.'))return;
+  v.splice(idx,1);
+  saveVendedores(v);
+  renderCfgVendedores();
+  renderVendedoresGrid();
+  renderVftabs();
+  // Mostrar confirmacion
+  var el=document.getElementById('cfg-vend-nuevo');
+  var orig=el.placeholder;
+  el.placeholder='Vendedor eliminado correctamente';
+  setTimeout(function(){el.placeholder=orig;},2000);
+}
+
+function renderVftabs(){
+  var vends=getVendedores();
+  var wrap=document.getElementById('vft');
+  if(!wrap)return;
+  wrap.innerHTML='<button class="vft active" onclick="fV(\'all\',this)">Todos</button>'+
+    vends.map(function(v){return '<button class="vft" onclick="fV(\''+v+'\',this)">'+v+'</button>';}).join('');
+}
+
+// =============================================
+// CARRITO MULTI-PRODUCTO
+// =============================================
+var carrito=[];
+
+function agregarOtroProducto(){
+  if(!cur)return;
+  var qty=parseInt(document.getElementById('cl-qty').value)||1;
+  var total=cur._total||cur.precio;
+  carrito.push({label:cur.label,precio:cur.precio,total:total,qty:qty,tag:cur.tag});
+  renderCarrito();
+  // Resetear producto sin resetear vendedor ni cliente
+  var nom=document.getElementById('cl-nom').value;
+  var wa=document.getElementById('cl-wa').value;
+  resetSinV();
+  document.getElementById('cl-nom').value=nom;
+  document.getElementById('cl-wa').value=wa;
+  if(wa)updWA();
+  // Scroll arriba para elegir nuevo producto
+  window.scrollTo({top:document.getElementById('bp').offsetTop,behavior:'smooth'});
+  playClick();
+}
+
+function renderCarrito(){
+  if(!carrito.length){
+    document.getElementById('carrito-wrap').style.display='none';
+    return;
+  }
+  document.getElementById('carrito-wrap').style.display='block';
+  var items=document.getElementById('carrito-items');
+  items.innerHTML=carrito.map(function(it,i){
+    return '<div class="carrito-item">'+
+      '<div><div class="ci-label">'+it.label+'</div><div class="ci-qty">Cantidad: '+it.qty+'</div></div>'+
+      '<div class="ci-precio">$'+it.total.toLocaleString('es-MX')+'</div>'+
+      '<button class="ci-del" onclick="quitarDelCarrito('+i+')">✕</button>'+
+    '</div>';
+  }).join('');
+  var totalOrden=carrito.reduce(function(s,it){return s+it.total;},0);
+  document.getElementById('carrito-total').textContent='$'+totalOrden.toLocaleString('es-MX');
+}
+
+function quitarDelCarrito(idx){
+  carrito.splice(idx,1);
+  renderCarrito();
+}
+
+// =============================================
+// PRECIOS EDITABLES
+// =============================================
+var PRECIOS_OVERRIDE={};
+function getPrecioOverride(key,defaultVal){
+  return PRECIOS_OVERRIDE[key]!==undefined?PRECIOS_OVERRIDE[key]:defaultVal;
+}
+function loadPreciosOverride(){
+  try{var p=localStorage.getItem('cl_precios');if(p)PRECIOS_OVERRIDE=JSON.parse(p);}catch{}
+  // Aplicar overrides a los objetos de precios
+  aplicarOverrides();
+}
+function aplicarOverrides(){
+  if(PRECIOS_OVERRIDE['vinil__pequeno'])VINIL_CM2=PRECIOS_OVERRIDE['vinil__pequeno'];
+  if(PRECIOS_OVERRIDE['vinil__grande'])VINIL_M2=PRECIOS_OVERRIDE['vinil__grande'];
+  Object.keys(PRECIOS_OVERRIDE).forEach(function(k){
+    var parts=k.split('__');
+    var cat=parts[0],subk=parts[1];
+    if(NEON_LINEA[subk]&&cat==='neon')NEON_LINEA[subk].precio=PRECIOS_OVERRIDE[k];
+    if(ACR_LINEA[subk]&&cat==='acr')ACR_LINEA[subk].precio=PRECIOS_OVERRIDE[k];
+    if(RES_IL[subk]&&cat==='resil')RES_IL[subk].precio=PRECIOS_OVERRIDE[k];
+    if(RES_IC[subk]&&cat==='resic')RES_IC[subk].precio=PRECIOS_OVERRIDE[k];
+    if(POL_L[subk]&&cat==='poll')POL_L[subk].precio=PRECIOS_OVERRIDE[k];
+    if(POL_C[subk]&&cat==='polc')POL_C[subk].precio=PRECIOS_OVERRIDE[k];
+  });
+}
+function savePreciosOverride(){try{localStorage.setItem('cl_precios',JSON.stringify(PRECIOS_OVERRIDE));}catch{}}
+
+function renderCfgPrecios(){
+  var vpEl=document.getElementById('price__vinil__pequeno');
+  var vgEl=document.getElementById('price__vinil__grande');
+  if(vpEl)vpEl.value=VINIL_CM2;
+  if(vgEl)vgEl.value=VINIL_M2;
+  renderCfgGrupo('cfg-neon-precios', NEON_LINEA, 'neon');
+  renderCfgGrupo('cfg-acrilico-precios', ACR_LINEA, 'acr');
+  renderCfgGrupo('cfg-resina-il-precios', RES_IL, 'resil');
+  renderCfgGrupo('cfg-resina-ic-precios', RES_IC, 'resic');
+  var polAll=Object.assign({},POL_L,POL_C);
+  renderCfgGrupo('cfg-polioleo-precios', polAll, 'pol');
+}
+
+function cleanLabel(label){
+  return label
+    .replace('Cuadro Neon ','')
+    .replace('Letrero Acrilico ','')
+    .replace('Resina c/Imagen Linea ','')
+    .replace('Resina c/Imagen ','')
+    .replace('Resina sin Luz ','')
+    .replace('Polioleo Linea ','Linea ')
+    .replace('Polioleo Personalizado ','Custom ')
+    .replace('Polioleo ','');
+}
+function renderCfgGrupo(elId, obj, cat){
+  var el=document.getElementById(elId);
+  if(!el)return;
+  el.innerHTML=Object.entries(obj).map(function(e){
+    var k=e[0],v=e[1];
+    return '<div class="cfg-item">'+
+      '<span class="cfg-item-name">'+cleanLabel(v.label)+'</span>'+
+      '<input class="inp price-inp" type="number" id="price__'+cat+'__'+k+'" value="'+v.precio+'">'+
+    '</div>';
+  }).join('');
+}
+
+function guardarPrecios(){
+  var inputs=document.querySelectorAll('[id^="price__"]');
+  inputs.forEach(function(inp){
+    var parts=inp.id.split('__');
+    var cat=parts[1],k=parts[2];
+    var val=parseInt(inp.value);
+    if(val>0){
+      PRECIOS_OVERRIDE[cat+'__'+k]=val;
+      if(cat==='neon'&&NEON_LINEA[k])NEON_LINEA[k].precio=val;
+      if(cat==='acr'&&ACR_LINEA[k])ACR_LINEA[k].precio=val;
+      if(cat==='resil'&&RES_IL[k])RES_IL[k].precio=val;
+      if(cat==='resic'&&RES_IC[k])RES_IC[k].precio=val;
+      if((cat==='pol')&&POL_L[k])POL_L[k].precio=val;
+      if((cat==='pol')&&POL_C[k])POL_C[k].precio=val;
+      if(cat==='vinil'&&k==='pequeno'){VINIL_CM2=parseFloat(document.getElementById('price__vinil__pequeno').value)||0.05;PRECIOS_OVERRIDE['vinil__pequeno']=VINIL_CM2;}
+      if(cat==='vinil'&&k==='grande'){VINIL_M2=parseFloat(document.getElementById('price__vinil__grande').value)||450;PRECIOS_OVERRIDE['vinil__grande']=VINIL_M2;}
+    }
+  });
+  savePreciosOverride();
+  // Reconstruir grid de resina
+  buildResinaGrids();
+  // Actualizar botones de línea en HTML
+  actualizarBotonesLinea();
+  alert('Precios guardados correctamente.');
+}
+
+function resetPrecios(){
+  if(!confirm('Restablecer todos los precios a los valores originales?'))return;
+  PRECIOS_OVERRIDE={};
+  savePreciosOverride();
+  location.reload();
+}
+
+function buildResinaGrids(){
+  var g=document.getElementById('res-il-grid');
+  if(g)g.innerHTML=Object.entries(RES_IL).map(function(e){
+    return '<div class="sc" onclick="selResIL(\''+e[0]+'\',this)"><div class="sct">'+e[0].replace('x','×')+' cm</div><div class="scp">$'+e[1].precio+'</div></div>';
+  }).join('');
+  var g2=document.getElementById('res-ic-grid');
+  if(g2)g2.innerHTML=Object.entries(RES_IC).map(function(e){
+    return '<div class="sc" onclick="selResIC(\''+e[0]+'\',this)"><div class="sct">'+e[0].replace('x','×')+' cm</div><div class="scp">$'+e[1].precio+'</div></div>';
+  }).join('');
+}
+
+function actualizarBotonesLinea(){
+  // Actualizar precios visibles en botones de opciones
+  document.querySelectorAll('[id$="-opts"] .o.full .op').forEach(function(el){
+    var btn=el.parentNode;
+    var onclick=btn.getAttribute('onclick');
+    if(!onclick)return;
+    var match=onclick.match(/'([^']+)'\)/);
+    if(!match)return;
+    var key=match[1];
+    var precio=null;
+    if(NEON_LINEA[key])precio=NEON_LINEA[key].precio;
+    else if(ACR_LINEA[key])precio=ACR_LINEA[key].precio;
+    else if(POL_L[key])precio=POL_L[key].precio;
+    else if(POL_C[key])precio=POL_C[key].precio;
+    if(precio)el.textContent='$'+precio.toLocaleString('es-MX');
+  });
+}
+
+</script>
+</body>
+</html>
